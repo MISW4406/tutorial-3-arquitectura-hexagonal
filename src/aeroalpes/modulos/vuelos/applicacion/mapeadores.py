@@ -1,13 +1,28 @@
-from aeroalpes.seedwork.aplicacion.dto import Mapeador
-from aeroalpes.modulos.vuelos.dominio.entidades import Reserva
-from aeroalpes.modulos.vuelos.dominio.objetos_valor import Itinerario
-from .dto import ReservaDTO, ItinerarioDTO
+from aeroalpes.seedwork.aplicacion.dto import Mapeador as AppMap
+from aeroalpes.seedwork.dominio.repositorios import Mapeador as RepMap
+from aeroalpes.modulos.vuelos.dominio.entidades import Reserva, Aeropuerto
+from aeroalpes.modulos.vuelos.dominio.objetos_valor import Itinerario, Odo, Segmento, Leg
+from .dto import ReservaDTO, ItinerarioDTO, OdoDTO, SegmentoDTO, LegDTO
 
-class MapeadorReservaDTOJson(Mapeador):
-    def _procesar_itinerario(self, itinerario: Itinerario) -> ItinerarioDTO:
-        dto: ItinerarioDTO = ItinerarioDTO()
+from datetime import datetime
 
-        return dto
+class MapeadorReservaDTOJson(AppMap):
+    def _procesar_itinerario(self, itinerario: dict) -> ItinerarioDTO:
+        odos_dto: list[OdoDTO] = list()
+        for odo in itinerario.get('odos', list()):
+
+            segmentos_dto: list[SegmentoDTO] = list()
+            for segmento in odo.get('segmentos', list()):
+                legs_dto: list[LegDTO] = list()
+                for leg in segmento.get('legs', list()):
+                    leg_dto: LegDTO = LegDTO(leg.get('fecha_salida'), leg.get('fecha_llegada'), leg.origen, leg.destino) 
+                    legs_dto.append(leg_dto)  
+                
+                segmentos_dto.append(SegmentoDTO(legs_dto))
+            
+            odos_dto.append(Odo(segmentos_dto))
+
+        return ItinerarioDTO(odos_dto)
     
     def externo_a_dto(self, externo: dict) -> ReservaDTO:
         reserva_dto = ReservaDTO()
@@ -20,4 +35,57 @@ class MapeadorReservaDTOJson(Mapeador):
 
     def dto_a_externo(self, dto: ReservaDTO) -> dict:
         return dto.__dict__
+
+class MapeadorReserva(RepMap):
+    _FORMATO_FECHA = '%Y-%m-%dT%H:%M:%SZ'
+
+    def _procesar_itinerario(self, itinerario_dto: ItinerarioDTO) -> Itinerario:
+        odos = list()
+
+        for odo_dto in itinerario_dto.odos:
+            segmentos = list()
+            for seg_dto in odo_dto.segmentos:
+                
+                legs = list()
+
+                for leg_dto in seg_dto.legs:
+                    leg: Leg = Leg()
+                    
+                    leg.destino = Aeropuerto(codigo=leg_dto.destino.get('codigo'), nombre=leg_dto.destino.get('nombre'))
+                    leg.origen = Aeropuerto(codigo=leg_dto.origen.get('codigo'), nombre=leg_dto.origen.get('nombre'))
+                    leg.fecha_salida = datetime.strptime(leg_dto.fecha_salida, self._FORMATO_FECHA)
+                    leg.fecha_llegada = datetime.strptime(leg_dto.fecha_llegada, self._FORMATO_FECHA)
+
+                    legs.append(leg)
+
+                segmentos.append(Segmento(legs))
+            
+            odos.append(Odo(segmentos))
+
+        return Itinerario(odos)
+
+    def obtener_tipo(self) -> type:
+        return Reserva.__class__
+
+
+    def entidad_a_dto(self, entidad: Reserva) -> ReservaDTO:
+        
+        fecha_creacion = entidad.fecha_creacion.strftime(self._FORMATO_FECHA)
+        fecha_actualizacion = entidad.fecha_actualizacion.strftime(self._FORMATO_FECHA)
+        _id = str(entidad.siguiente_id())
+
+        return ReservaDTO(fecha_creacion, fecha_actualizacion, _id, list())
+
+    def dto_a_entidad(self, dto: ReservaDTO) -> Reserva:
+        reserva = Reserva()
+        reserva.itinerarios = list()
+
+        itinerarios_dto: list[ItinerarioDTO] = dto.itinerarios
+
+        for itin in itinerarios_dto:
+            reserva.itinerarios.append(self._procesar_itinerario(itin))
+        
+        return reserva
+
+
 
