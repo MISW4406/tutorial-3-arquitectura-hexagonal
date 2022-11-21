@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from aeroalpes.seedwork.dominio.objetos_valor import ObjetoValor, Codigo, Ruta, Locacion
+#import aeroalpes.modulos.vuelos.dominio.entidades as e
 from datetime import datetime
 from enum import Enum
 
@@ -57,10 +58,10 @@ class TipoVuelo(Enum):
     IDA = "Solo ida"
     OPEN_JAW = "Open Jaw"
 
-@dataclass
+@dataclass(frozen=True)
 class Itinerario(ObjetoValor):
     odos: list[Odo] = field(default_factory=list)
-    proveedor: Proveedor = field(default_factory=Proveedor)
+    #proveedor: e.Proveedor = field(default_factory=e.Proveedor)
 
     @classmethod
     def es_ida_y_vuelta(self) -> bool:
