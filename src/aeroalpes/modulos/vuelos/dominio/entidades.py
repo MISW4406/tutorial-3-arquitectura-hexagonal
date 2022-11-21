@@ -16,7 +16,7 @@ class Aeropuerto(Locacion):
 class Proveedor(Entidad):
     codigo: ov.Codigo = field(default_factory=ov.Codigo)
     nombre: ov.NombreAero = field(default_factory=ov.NombreAero)
-    itinerarios: list[ov.Itinerario] = field(default_factory=list)
+    itinerarios: list[ov.Itinerario] = field(default_factory=list[ov.Itinerario])
 
     def obtener_itinerarios(self, odos: list[Odo], parametros: ParametroBusca):
         return self.itinerarios
@@ -29,4 +29,4 @@ class Pasajero(Entidad):
 
 @dataclass
 class Reserva(AgregacionRaiz):
-    itinerarios: list[ov.Itinerario] = field(default_factory=list)
+    itinerarios: list[ov.Itinerario] = field(default_factory=list[ov.Itinerario])

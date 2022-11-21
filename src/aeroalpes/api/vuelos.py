@@ -18,9 +18,9 @@ def reservar():
     reserva_dto = map_reserva.externo_a_dto(reserva_dict)
 
     sr = ServicioReserva()
-    sr.crear_reserva(reserva_dto)
+    dto_final = sr.crear_reserva(reserva_dto)
     
-    return reserva_dict
+    return map_reserva.dto_a_externo(dto_final)
 
 @bp.route('/reserva', methods=('GET',))
 def dar_reserva():

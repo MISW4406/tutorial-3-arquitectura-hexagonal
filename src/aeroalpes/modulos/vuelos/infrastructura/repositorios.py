@@ -1,8 +1,6 @@
 from aeroalpes.seedwork.dominio.repositorios import Repositorio
-from aeroalpes.modulos.vuelos.dominio.objetos_valor import CodigoIATA
-from aeroalpes.modulos.vuelos.dominio.objetos_valor import NombreAero, Odo, Leg, Segmento
-from .objetos_valor import Itinerario
-from .entidades import Proveedor, Aeropuerto, Reserva
+from aeroalpes.modulos.vuelos.dominio.objetos_valor import NombreAero, Odo, Leg, Segmento, Itinerario, CodigoIATA
+from aeroalpes.modulos.vuelos.dominio.entidades import Proveedor, Aeropuerto, Reserva
 from uuid import UUID
 
 class RepositorioProveedores(Repositorio):
@@ -25,4 +23,16 @@ class SqlLiteMapper:
 
 class RepositorioReservas(Repositorio):
     def obtener_por_id(self, id: UUID) -> Reserva:
+        ...
+
+    def obtener_todos(self, id: UUID) -> list[Reserva]:
+        ...
+
+    def agregar(self, entity: Reserva):
+        ...
+
+    def actualizar(self, entity: Reserva):
+        ...
+
+    def eliminar(self, entity_id: UUID):
         ...
