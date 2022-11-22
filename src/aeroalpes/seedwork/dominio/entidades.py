@@ -14,7 +14,7 @@ class Entidad:
 
     @classmethod
     def siguiente_id(self) -> uuid.UUID:
-        return uuid.uuid4
+        return uuid.uuid4()
 
     @property
     def id(self):
@@ -24,7 +24,7 @@ class Entidad:
     def id(self, id: uuid.UUID) -> None:
         if not IdEntidadEsInmutable(self).es_valido():
             raise IdDebeSerInmutableExcepcion(IdEntidadEsInmutable.__mensaje)
-        self._id =id
+        self._id = self.siguiente_id()
         
 
 @dataclass

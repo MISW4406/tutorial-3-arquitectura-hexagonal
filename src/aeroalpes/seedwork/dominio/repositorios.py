@@ -8,7 +8,7 @@ class Repositorio(ABC):
         ...
 
     @abstractmethod
-    def obtener_todos(self, id: UUID) -> list[Entidad]:
+    def obtener_todos(self) -> list[Entidad]:
         ...
 
     @abstractmethod
@@ -22,10 +22,6 @@ class Repositorio(ABC):
     @abstractmethod
     def eliminar(self, entity_id: UUID):
         ...
-
-    @staticmethod
-    def siguiente_id() -> UUID:
-        return UUID.v4()
 
 
 class Mapeador(ABC):
