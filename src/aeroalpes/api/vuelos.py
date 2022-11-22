@@ -12,8 +12,6 @@ bp = api.crear_blueprint('vuelos', '/vuelos')
 def reservar():
     reserva_dict = request.json
 
-    print(type(reserva_dict))
-
     map_reserva = MapeadorReservaDTOJson()
     reserva_dto = map_reserva.externo_a_dto(reserva_dict)
 
