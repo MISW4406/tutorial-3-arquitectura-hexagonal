@@ -6,6 +6,9 @@ __pycache__/
 # C extensions
 *.so
 
+# Ignora las bases de dato de SQLIte
+*.db
+
 # Distribution / packaging
 .Python
 build/

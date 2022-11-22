@@ -1,17 +1,16 @@
 import os
 from flask import Flask, render_template, request, url_for, redirect
-from flask_sqlalchemy import SQLAlchemy
-
-from sqlalchemy.sql import func
 
 # Identifica el directorio base
 basedir = os.path.abspath(os.path.dirname(__file__))
 
-db = None
-
-def init_db(app: Flask):
-    db = SQLAlchemy(app)
-
+def importar_modelos_alchemy():
+    import aeroalpes.modulos.cliente.infraestructura.dto
+    import aeroalpes.modulos.hoteles.infraestructura.dto
+    import aeroalpes.modulos.pagos.infraestructura.dto
+    import aeroalpes.modulos.precios_dinamicos.infraestructura.dto
+    import aeroalpes.modulos.vehiculos.infraestructura.dto
+    import aeroalpes.modulos.vuelos.infrastructura.dto
 
 def create_app(configuracion=None):
     # Init la aplicacion de Flask
@@ -38,7 +37,15 @@ def create_app(configuracion=None):
     app.register_blueprint(vehiculos.bp)
     app.register_blueprint(vuelos.bp)
 
-    # Inicializa la DB
-    init_db(db)
+     # Inicializa la DB
+    from aeroalpes.config.db import init_db
+    init_db(app)
+
+    from aeroalpes.config.db import db
+
+    importar_modelos_alchemy()
+
+    with app.app_context():
+        db.create_all()
 
     return app

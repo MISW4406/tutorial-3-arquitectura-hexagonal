@@ -4,5 +4,5 @@ from .mixins import ValidarReglasMixin
 
 class Fabrica(ABC, ValidarReglasMixin):
     @abstractmethod
-    def crear_objeto(self, obj: any, mapeador: Mapeador) -> any:
+    def crear_objeto(self, obj: any, mapeador: Mapeador=None) -> any:
         ...
