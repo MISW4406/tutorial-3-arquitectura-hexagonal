@@ -15,7 +15,7 @@ class MapeadorReservaDTOJson(AppMap):
             for segmento in odo.get('segmentos', list()):
                 legs_dto: list[LegDTO] = list()
                 for leg in segmento.get('legs', list()):
-                    leg_dto: LegDTO = LegDTO(leg.get('fecha_salida'), leg.get('fecha_llegada'), leg.origen, leg.destino) 
+                    leg_dto: LegDTO = LegDTO(leg.get('fecha_salida'), leg.get('fecha_llegada'), leg.get('origen'), leg.get('destino')) 
                     legs_dto.append(leg_dto)  
                 
                 segmentos_dto.append(SegmentoDTO(legs_dto))
@@ -49,12 +49,12 @@ class MapeadorReserva(RepMap):
                 legs = list()
 
                 for leg_dto in seg_dto.legs:
-                    leg: Leg = Leg()
-                    
-                    leg.destino = Aeropuerto(codigo=leg_dto.destino.get('codigo'), nombre=leg_dto.destino.get('nombre'))
-                    leg.origen = Aeropuerto(codigo=leg_dto.origen.get('codigo'), nombre=leg_dto.origen.get('nombre'))
-                    leg.fecha_salida = datetime.strptime(leg_dto.fecha_salida, self._FORMATO_FECHA)
-                    leg.fecha_llegada = datetime.strptime(leg_dto.fecha_llegada, self._FORMATO_FECHA)
+                    destino = Aeropuerto(codigo=leg_dto.destino.get('codigo'), nombre=leg_dto.destino.get('nombre'))
+                    origen = Aeropuerto(codigo=leg_dto.origen.get('codigo'), nombre=leg_dto.origen.get('nombre'))
+                    fecha_salida = datetime.strptime(leg_dto.fecha_salida, self._FORMATO_FECHA)
+                    fecha_llegada = datetime.strptime(leg_dto.fecha_llegada, self._FORMATO_FECHA)
+
+                    leg: Leg = Leg(fecha_salida, fecha_llegada, origen, destino)
 
                     legs.append(leg)
 
@@ -72,7 +72,7 @@ class MapeadorReserva(RepMap):
         
         fecha_creacion = entidad.fecha_creacion.strftime(self._FORMATO_FECHA)
         fecha_actualizacion = entidad.fecha_actualizacion.strftime(self._FORMATO_FECHA)
-        _id = str(entidad.siguiente_id())
+        _id = str(entidad.id)
 
         return ReservaDTO(fecha_creacion, fecha_actualizacion, _id, list())
 

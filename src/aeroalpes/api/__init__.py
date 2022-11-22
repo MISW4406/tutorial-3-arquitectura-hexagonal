@@ -1,5 +1,6 @@
 import os
-from flask import Flask, render_template, request, url_for, redirect
+from flask import Flask, render_template, request, url_for, redirect, jsonify
+from flask_swagger import swagger
 
 # Identifica el directorio base
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -21,7 +22,18 @@ def create_app(configuracion=None):
             'sqlite:///' + os.path.join(basedir, 'database.db')
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-    # Importa Blueprints
+     # Inicializa la DB
+    from aeroalpes.config.db import init_db
+    init_db(app)
+
+    from aeroalpes.config.db import db
+
+    importar_modelos_alchemy()
+
+    with app.app_context():
+        db.create_all()
+
+     # Importa Blueprints
     from . import cliente
     from . import hoteles
     from . import pagos
@@ -37,15 +49,11 @@ def create_app(configuracion=None):
     app.register_blueprint(vehiculos.bp)
     app.register_blueprint(vuelos.bp)
 
-     # Inicializa la DB
-    from aeroalpes.config.db import init_db
-    init_db(app)
-
-    from aeroalpes.config.db import db
-
-    importar_modelos_alchemy()
-
-    with app.app_context():
-        db.create_all()
+    @app.route("/spec")
+    def spec():
+        swag = swagger(app)
+        swag['info']['version'] = "1.0"
+        swag['info']['title'] = "My API"
+        return jsonify(swag)
 
     return app

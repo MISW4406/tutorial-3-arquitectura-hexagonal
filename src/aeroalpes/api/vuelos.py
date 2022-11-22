@@ -21,5 +21,11 @@ def reservar():
     return map_reserva.dto_a_externo(dto_final)
 
 @bp.route('/reserva', methods=('GET',))
-def dar_reserva():
-    return {'message': 'GET!'}
+@bp.route('/reserva/<id>', methods=('GET',))
+def dar_reserva(id=None):
+    if id:
+        sr = ServicioReserva()
+        
+        return sr.obtener_reserva_por_id(id)
+    else:
+        return [{'message': 'GET!'}]
