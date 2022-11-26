@@ -2,8 +2,9 @@ from dataclasses import dataclass, field
 import pytest
 from datetime import datetime
 from uuid import UUID
-from ..entidades import Entidad
-from ..excepciones import ReglaNegocioExcepcion
+from aeroalpes.seedwork.dominio.entidades import Entidad
+from aeroalpes.seedwork.dominio.excepciones import IdDebeSerInmutableExcepcion
+
 
 """
     Clases de Soporte para validar el seedwork
@@ -51,7 +52,7 @@ def test_entidad_tiene_constructor_con_parametros():
     assert entidadPrueba.campo2 == 2
 
 def test_entidad_id_es_inmutable():
-    with pytest.raises(ReglaNegocioExcepcion):
+    with pytest.raises(IdDebeSerInmutableExcepcion):
         # Dada una entidad
         entidadPrueba = EntidadPrueba()
 

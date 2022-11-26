@@ -1,3 +1,10 @@
+""" Excepciones del dominio de vuelos
+
+En este archivo usted encontrará los Excepciones relacionadas
+al dominio de vuelos
+
+"""
+
 from aeroalpes.seedwork.dominio.excepciones import ExcepcionFabrica
 
 class TipoObjetoNoExisteEnDominioVuelosExcepcion(ExcepcionFabrica):

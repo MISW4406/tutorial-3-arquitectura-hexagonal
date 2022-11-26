@@ -1,3 +1,9 @@
+""" Mapeadores para la capa de infrastructura del dominio de vuelos
+
+En este archivo usted encontrará los diferentes mapeadores
+encargados de la transformación entre formatos de dominio y DTOs
+
+"""
 
 from aeroalpes.seedwork.dominio.repositorios import Mapeador
 from aeroalpes.modulos.vuelos.dominio.objetos_valor import NombreAero, Odo, Leg, Segmento, Itinerario, CodigoIATA
@@ -25,7 +31,6 @@ class MapeadorReserva(Mapeador):
             for k, seg_dict in odos_dict.items():
                 legs = list()
                 for k, leg in seg_dict.items():
-                    print(leg)
                     legs.append(leg)
                 segmentos.append(Segmento(legs))
             odos.append(Odo(segmentos))
@@ -49,7 +54,6 @@ class MapeadorReserva(Mapeador):
 
                     itinerarios_dto.append(itinerario_dto)
 
-        print(itinerarios_dto)
         return itinerarios_dto
 
     def obtener_tipo(self) -> type:

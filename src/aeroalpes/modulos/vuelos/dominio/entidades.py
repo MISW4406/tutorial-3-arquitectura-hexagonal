@@ -1,3 +1,9 @@
+"""Entidades del dominio de vuelos
+
+En este archivo usted encontrará las entidades del dominio de vuelos
+
+"""
+
 from __future__ import annotations
 from dataclasses import dataclass, field
 

@@ -1,9 +1,9 @@
 import aeroalpes.seedwork.presentacion.api as api
-from aeroalpes.modulos.vuelos.applicacion.servicios import ServicioReserva
-from aeroalpes.modulos.vuelos.applicacion.dto import ReservaDTO
+from aeroalpes.modulos.vuelos.aplicacion.servicios import ServicioReserva
+from aeroalpes.modulos.vuelos.aplicacion.dto import ReservaDTO
 
 from flask import redirect, render_template, request, session, url_for
-from aeroalpes.modulos.vuelos.applicacion.mapeadores import MapeadorReservaDTOJson
+from aeroalpes.modulos.vuelos.aplicacion.mapeadores import MapeadorReservaDTOJson
 
 bp = api.crear_blueprint('vuelos', '/vuelos')
 

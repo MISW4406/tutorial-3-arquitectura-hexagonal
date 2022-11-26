@@ -1,0 +1,17 @@
+[project]
+name = "aeroalpes"
+version = "1.0.0"
+authors = [
+  { name="Juan Urrego", email="js.urrego110@uniandes.edu.co" },
+]
+description = "Proyecto de ejemplo de AeroAlpes"
+readme = "README.md"
+requires-python = ">=3.9"
+
+[tool.pytest.ini_options]
+addopts = [
+    "--import-mode=importlib",
+]
+pythonpath = [
+  ".", "src",
+]
