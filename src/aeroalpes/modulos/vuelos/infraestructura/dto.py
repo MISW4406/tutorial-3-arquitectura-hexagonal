@@ -1,3 +1,10 @@
+"""DTOs para la capa de infrastructura del dominio de vuelos
+
+En este archivo usted encontrará los DTOs (modelos anémicos) de
+la infraestructura del dominio de vuelos
+
+"""
+
 from aeroalpes.config.db import db
 from sqlalchemy.orm import declarative_base, relationship
 from sqlalchemy import Column, ForeignKey, Integer, Table
@@ -6,6 +13,7 @@ import uuid
 
 Base = db.declarative_base()
 
+# Tabla intermedia para tener la relación de muchos a muchos entre la tabla reservas e itinerarios
 reservas_itinerarios = db.Table(
     "reservas_itinerarios",
     db.Model.metadata,
@@ -22,7 +30,6 @@ reservas_itinerarios = db.Table(
         ["itinerarios.odo_orden", "itinerarios.segmento_orden", "itinerarios.leg_orden", "itinerarios.fecha_salida", "itinerarios.fecha_llegada", "itinerarios.origen_codigo", "itinerarios.destino_codigo"]
     )
 )
-
 
 class Itinerario(db.Model):
     __tablename__ = "itinerarios"

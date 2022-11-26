@@ -1,3 +1,10 @@
+""" Fábricas para la creación de objetos del dominio de vuelos
+
+En este archivo usted encontrará las diferentes fábricas para crear
+objetos complejos del dominio de vuelos
+
+"""
+
 from .entidades import Reserva
 from .reglas import MinimoUnItinerario, RutaValida
 from .excepciones import TipoObjetoNoExisteEnDominioVuelosExcepcion

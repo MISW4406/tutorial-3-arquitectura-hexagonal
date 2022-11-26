@@ -11,7 +11,7 @@ def importar_modelos_alchemy():
     import aeroalpes.modulos.pagos.infraestructura.dto
     import aeroalpes.modulos.precios_dinamicos.infraestructura.dto
     import aeroalpes.modulos.vehiculos.infraestructura.dto
-    import aeroalpes.modulos.vuelos.infrastructura.dto
+    import aeroalpes.modulos.vuelos.infraestructura.dto
 
 def create_app(configuracion=None):
     # Init la aplicacion de Flask

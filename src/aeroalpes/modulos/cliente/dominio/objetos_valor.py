@@ -1,3 +1,9 @@
+"""Objetos valor del dominio de cliente
+
+En este archivo usted encontrará los objetos valor del dominio de cliente
+
+"""
+
 from aeroalpes.seedwork.dominio.objetos_valor import ObjetoValor, Ciudad
 from dataclasses import dataclass
 
@@ -24,5 +30,5 @@ class Rut(ObjetoValor):
 
 class MetodosPago(ObjetoValor):
     # TODO
-    pass
+    ...
 

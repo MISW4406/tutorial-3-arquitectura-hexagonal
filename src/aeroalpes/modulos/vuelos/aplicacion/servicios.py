@@ -1,8 +1,8 @@
 from aeroalpes.seedwork.aplicacion.servicios import Servicio
 from aeroalpes.modulos.vuelos.dominio.entidades import Reserva
 from aeroalpes.modulos.vuelos.dominio.fabricas import FabricaVuelos
-from aeroalpes.modulos.vuelos.infrastructura.fabricas import FabricaRepositorio
-from aeroalpes.modulos.vuelos.infrastructura.repositorios import RepositorioReservas
+from aeroalpes.modulos.vuelos.infraestructura.fabricas import FabricaRepositorio
+from aeroalpes.modulos.vuelos.infraestructura.repositorios import RepositorioReservas
 from .mapeadores import MapeadorReserva
 
 from .dto import ReservaDTO
