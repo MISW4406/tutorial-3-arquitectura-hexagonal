@@ -56,4 +56,8 @@ def create_app(configuracion=None):
         swag['info']['title'] = "My API"
         return jsonify(swag)
 
+    @app.route("/health")
+    def health():
+        return {"status": "up"}
+
     return app
