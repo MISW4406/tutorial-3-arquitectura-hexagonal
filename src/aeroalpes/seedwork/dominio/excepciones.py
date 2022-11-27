@@ -1,3 +1,9 @@
+""" Excepciones reusables parte del seedwork del proyecto
+
+En este archivo usted encontrará los Excepciones reusables parte del seedwork del proyecto
+
+"""
+
 from .reglas import ReglaNegocio
 
 class ExcepcionDominio(Exception):

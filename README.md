@@ -79,3 +79,8 @@ Los siguientes JSON pueden ser usados para probar el API:
 ```bash
 coverage run -m pytest
 ```
+
+# Ver reporte de covertura
+```bash
+coverage report
+```

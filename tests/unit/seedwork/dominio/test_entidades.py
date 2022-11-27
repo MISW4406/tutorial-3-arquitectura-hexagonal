@@ -1,3 +1,9 @@
+"""Pruebas para archivo de entidades de Seedwork
+
+En este archivo usted encontrará las diferentes pruebas de validación para los modelos abstractos y reusables del seedwork
+
+"""
+
 from dataclasses import dataclass, field
 import pytest
 from datetime import datetime
@@ -15,6 +21,9 @@ class EntidadPrueba(Entidad):
     campo1: str = field(default=None)
     campo2: int = field(default=0)
 
+"""
+    Pruebas
+"""
 
 def test_entidad_es_implementable():
     # Dada una entidad que hereda de Entidad
@@ -37,7 +46,7 @@ def test_inicializa_los_atributos_de_entidad():
 
     # Entonces debe inicializar los atributos en la clase padre Entidad
     assert entidadPrueba is not None
-    assert entidadPrueba.id is not None
+    assert entidadPrueba.id is not None and type(entidadPrueba.id) == UUID
     assert entidadPrueba.fecha_actualizacion is not None and type(entidadPrueba.fecha_actualizacion) == datetime
     assert entidadPrueba.fecha_creacion is not None  and type(entidadPrueba.fecha_creacion) == datetime
 
