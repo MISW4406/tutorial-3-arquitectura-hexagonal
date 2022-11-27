@@ -1,38 +1,30 @@
-"""Pruebas para archivo de fábrica de Seedwork
+"""Pruebas para archivo de Servicios de Seedwork
 
-En este archivo usted encontrará las diferentes pruebas de validacióm para las fábricas base y reusables definidas en el seedwork
+En este archivo usted encontrará las diferentes pruebas de validacióm para los Servicios base y reusables definidas en el seedwork
 
 """
 
 import pytest
-from aeroalpes.seedwork.dominio.fabricas import Fabrica
+from aeroalpes.seedwork.dominio.servicios import Servicio
 
 
 """
     Clases de Soporte para validar el seedwork
 """
 
-class FabricaImplementada(Fabrica):
-    def crear_objeto(self, obj: any, mapeador: any) -> any:
-        return "Mi Objeto"
-
-class FabricaSinImplementar(Fabrica):
+class ServicioImpl(Servicio):
     ...
 
 """
     Pruebas
 """
 
-def test_crear_fabrica_sin_implementacion():
-    with pytest.raises(TypeError):
-        fabrica = FabricaSinImplementar()
+def test_crear_servicio_desde_base():
+    # Dada un nuevo Servicio
+    servicio = ServicioImpl()
 
-def test_crear_fabrica_con_implementacion():
-    # Dada un nueva fabrica
-    fabrica = FabricaImplementada()
-
-    # Con metodo creacional
-    assert fabrica.crear_objeto({}, {}) is not None
+    # El Servicio es correcto y no tiene fallos en la creación
+    assert servicio is not None
 
 
 

@@ -39,7 +39,7 @@ Los siguientes JSON pueden ser usados para probar el API:
 
 - **Endpoint**: `/vuelos/reserva`
 - **Método**: `POST`
-- **Headers**: 
+- **Headers**: `Content-Type='aplication/json'`
 
 ```json
 {
@@ -73,6 +73,12 @@ Los siguientes JSON pueden ser usados para probar el API:
     ]
 }
 ```
+
+### Ver Reserva(s)
+
+- **Endpoint**: `/vuelos/reserva/{id}`
+- **Método**: `GET`
+- **Headers**: `Content-Type='aplication/json'`
 
 ## Ejecutar pruebas
 
