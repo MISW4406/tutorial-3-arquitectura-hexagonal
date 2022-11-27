@@ -6,7 +6,7 @@ authors = [
 ]
 description = "Proyecto de ejemplo de AeroAlpes"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 
 [tool.pytest.ini_options]
 addopts = [

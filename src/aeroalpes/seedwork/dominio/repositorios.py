@@ -1,3 +1,10 @@
+""" Interfaces para los repositorios reusables parte del seedwork del proyecto
+
+En este archivo usted encontrará las diferentes interfaces para repositorios
+reusables parte del seedwork del proyecto
+
+"""
+
 from abc import ABC, abstractmethod
 from uuid import UUID
 from .entidades import Entidad
