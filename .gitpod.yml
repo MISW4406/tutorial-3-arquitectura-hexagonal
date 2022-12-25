@@ -9,6 +9,20 @@ tasks:
     init: pip install -r requirements.txt
   - name: Correr ambiente
     init: pyenv local 3.10.7
+  - name: Pull el Docker compose
+    init: docker-compose pull
+  - name: Ejecutar el docker-compose y sus servicios
+    command: docker-compose up
   
-
+ports:
+  - port: 2181
+    onOpen: ignore
+  - port: 8080
+    onOpen: open-browser
+  - port: 6650
+    onOpen: open-preview
+  - port: 2181
+    onOpen: ignore
+  - port: 6650
+    onOpen: ignore
 
