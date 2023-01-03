@@ -35,4 +35,6 @@ class Pasajero(Entidad):
 
 @dataclass
 class Reserva(AgregacionRaiz):
+    id_cliente: uuid.UUID = field(hash=True)
+    estado: ov.EstadoReserva = field(default_factory=ov.EstadoReserva)
     itinerarios: list[ov.Itinerario] = field(default_factory=list[ov.Itinerario])
