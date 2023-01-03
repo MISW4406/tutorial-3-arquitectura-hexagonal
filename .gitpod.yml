@@ -9,6 +9,24 @@ tasks:
     init: pip install -r requirements.txt
   - name: Correr ambiente
     init: pyenv local 3.10.7
+  - name: Crear folder para datos
+    init: mkdir data
+  - name: Dar permisos al directorio
+    init: sudo chmod -R 777 ./data
+  - name: Pull el Docker compose
+    init: docker-compose pull
+  - name: Ejecutar el docker-compose y sus servicios
+    command: docker-compose up
   
-
+ports:
+  - port: 2181
+    onOpen: ignore
+  - port: 8080
+    onOpen: ignore
+  - port: 6650
+    onOpen: ignore
+  - port: 2181
+    onOpen: ignore
+  - port: 6650
+    onOpen: ignore
 

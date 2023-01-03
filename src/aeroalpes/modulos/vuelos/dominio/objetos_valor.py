@@ -122,3 +122,9 @@ class TipoPasajero(Enum):
 @dataclass(frozen=True)
 class ParametroBusca(ObjetoValor):
     pasajeros: list[Pasajero] = field(default_factory=list)
+
+
+class EstadoReserva(Enum):
+    ACTIVA = "Activa"
+    PENDIENTE = "Pendiente"
+    CANCELADA = "Cancelada"
