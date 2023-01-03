@@ -4,7 +4,7 @@
 
 tasks:
   - name: Instalar Python
-    init: pyenv install 3.10.7
+    init: pyenv install 3.10.7 -f
   - name: Instalar dependencias
     init: pip install -r requirements.txt
   - name: Correr ambiente
