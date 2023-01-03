@@ -1,14 +1,11 @@
-# Tutorial 4 - CQRS y manejo de eventos
+# Tutorial 3 - Arquitectura Hexagonal
 
-Repositorio con código base para el uso de un sistema usando el patrón CQRS y usando eventos de dominio e integración para la comunicación asíncrona entre componentes internos parte del mismo contexto acotado y sistemas externos.
+Repositorio con código base para el desarrollo de una arquitectura hexagonal siguiendo los principios y patrones de DDD.
 
-Este repositorio es un Fork del repositorio de [arquitectura hexagonal](https://github.com/MISW4406/tutorial-3-arquitectura-hexagonal) visto en el tutorial 3 del curso. Por tal motivo, puede usar ese mismo repositorio para entender algunos detalles que este README no cubre.
 
 ## Estructura del proyecto
 
-Este repositorio sigue en general la misma estructura del repositorio de origen. Sin embargo, hay un par de adiciones importante mencionar:
-
-- El directorio **src** ahora cuenta con un nuevo directorio llamado **mensajeria**, el cual representa un servicio de mensajería que recibe eventos de dominio propagados del sistema de AeroAlpes, por medio de un broker de eventos.
+El repositorio en su raíz está estructurado de la siguiente forma:
 
 - **.github**: Directorio donde se localizan templates para Github y los CI/CD workflows 
 - **src**: En este directorio encuentra el código fuente para AeroAlpes. En la siguiente sección se explica un poco mejor la estructura del mismo ([link](https://blog.ionelmc.ro/2014/05/25/python-packaging/#the-structure%3E) para más información)
@@ -32,6 +29,56 @@ Siempre puede ejecutarlo en modo DEBUG:
 ```bash
 flask --app src/aeroalpes/api --debug run
 ```
+
+
+## Request de ejemplo
+
+Los siguientes JSON pueden ser usados para probar el API:
+
+### Reservar
+
+- **Endpoint**: `/vuelos/reserva`
+- **Método**: `POST`
+- **Headers**: `Content-Type='aplication/json'`
+
+```json
+{
+    "itinerarios": [
+        {
+            "odos": [
+                {
+                    "segmentos": [
+                        {
+                            "legs": [
+                                {
+                                    "fecha_salida": "2022-11-22T13:10:00Z",
+                                    "fecha_llegada": "2022-11-22T15:10:00Z",
+                                    "destino": {
+                                        "codigo": "JFK",
+                                        "nombre": "John F. Kennedy International Airport"
+                                    },
+                                    "origen": {
+                                        "codigo": "BOG",
+                                        "nombre": "El Dorado - Bogotá International Airport (BOG)"
+                                    }
+
+                                }
+                            ]
+                        }
+                    ]
+                }
+
+            ]
+        }
+    ]
+}
+```
+
+### Ver Reserva(s)
+
+- **Endpoint**: `/vuelos/reserva/{id}`
+- **Método**: `GET`
+- **Headers**: `Content-Type='aplication/json'`
 
 ## Ejecutar pruebas
 

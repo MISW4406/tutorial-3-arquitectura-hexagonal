@@ -130,6 +130,3 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
-
-# Data Volume for Zookeeper
-/data
