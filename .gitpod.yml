@@ -5,8 +5,8 @@
 tasks:
   - name: Instalar Python
     init: > 
-      pyenv install 3.10.7 -f
-      pyenv local 3.10.7
+      pyenv install 3.10.7 -f &&
+      pyenv local 3.10.7 &&
       gp sync-done bundle
   - name: Instalar dependencias
     init: gp sync-await bundle
