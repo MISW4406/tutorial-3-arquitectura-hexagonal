@@ -6,7 +6,7 @@ objetos complejos del dominio de vuelos
 """
 
 from .entidades import Reserva
-from .reglas import MinimoUnItinerario, RutaValida
+from .reglas import ReservaValida
 from .excepciones import TipoObjetoNoExisteEnDominioVuelosExcepcion
 from aeroalpes.seedwork.dominio.repositorios import Mapeador, Repositorio
 from aeroalpes.seedwork.dominio.fabricas import Fabrica
@@ -20,9 +20,7 @@ class _FabricaReserva(Fabrica):
             return mapeador.entidad_a_dto(obj)
         else:
             reserva: Reserva = mapeador.dto_a_entidad(obj)
-
-            self.validar_regla(MinimoUnItinerario(reserva.itinerarios))
-            [self.validar_regla(RutaValida(ruta)) for itin in reserva.itinerarios for odo in itin.odos for segmento in odo.segmentos for ruta in segmento.legs]
+            self.validar_regla(ReservaValida(reserva))
             
             return reserva
 

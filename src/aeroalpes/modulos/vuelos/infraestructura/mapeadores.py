@@ -44,10 +44,10 @@ class MapeadorReserva(Mapeador):
             for j, seg in enumerate(odo.segmentos):
                 for k, leg in enumerate(seg.legs):
                     itinerario_dto = ItinerarioDTO()
-                    itinerario_dto.destino_codigo = leg.destino.codigo
-                    itinerario_dto.origen_codigo = leg.origen.codigo
-                    itinerario_dto.fecha_salida = leg.fecha_salida
-                    itinerario_dto.fecha_llegada = leg.fecha_llegada
+                    itinerario_dto.destino_codigo = leg.destino().codigo
+                    itinerario_dto.origen_codigo = leg.origen().codigo
+                    itinerario_dto.fecha_salida = leg.fecha_salida()
+                    itinerario_dto.fecha_llegada = leg.fecha_llegada()
                     itinerario_dto.leg_orden = k
                     itinerario_dto.segmento_orden = j
                     itinerario_dto.odo_orden = i
@@ -59,8 +59,7 @@ class MapeadorReserva(Mapeador):
     def obtener_tipo(self) -> type:
         return Reserva.__class__
 
-    def entidad_a_dto(self, entidad: Reserva) -> ReservaDTO:
-        
+    def entidad_a_dto(self, entidad: Reserva) -> ReservaDTO:        
         reserva_dto = ReservaDTO()
         reserva_dto.fecha_creacion = entidad.fecha_creacion
         reserva_dto.fecha_actualizacion = entidad.fecha_actualizacion
