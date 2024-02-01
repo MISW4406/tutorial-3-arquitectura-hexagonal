@@ -3,7 +3,7 @@ from aeroalpes.modulos.vuelos.dominio.entidades import Itinerario, Proveedor
 from aeroalpes.modulos.vuelos.dominio.repositorios import RepositorioProveedores as rp
 from aeroalpes.seedwork.dominio.servicios import Servicio
 from aeroalpes.modulos.vuelos.dominio.mixins import FiltradoItinerariosMixin
-from aeroalpes.modulos.vuelos.dominio.reglas import MinimoUnAdulto, RutaValida
+from aeroalpes.modulos.vuelos.dominio.reglas import MinimoUnAdulto, OdoValido, RutaValida
 
 class ServicioBusqueda(Servicio, FiltradoItinerariosMixin):
 
@@ -12,7 +12,7 @@ class ServicioBusqueda(Servicio, FiltradoItinerariosMixin):
         proveedores:list[Proveedor] = rp.obtener_todos()
         
         self.validar_regla(MinimoUnAdulto(parametros.pasajeros))
-        [self.validar_regla(RutaValida(ruta)) for odo in odos for segmento in odo.segmentos for ruta in segmento.legs]
+        [self.validar_regla(OdoValido(odo)) for odo in odos]
 
         itinerarios.append([proveedor.obtener_itinerarios(odos, parametros) for proveedor in proveedores])
 

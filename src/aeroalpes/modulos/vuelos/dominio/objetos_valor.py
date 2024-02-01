@@ -25,38 +25,38 @@ class NombreAero():
 
 @dataclass(frozen=True)
 class Leg(Ruta):
-    fecha_salida: datetime
-    fecha_llegada: datetime
-    origen: Locacion
-    destino: Locacion
+    _fecha_salida: datetime
+    _fecha_llegada: datetime
+    _origen: Locacion
+    _destino: Locacion
 
     def origen(self) -> Locacion:
-        return self.origen
+        return self._origen
 
     def destino(self) -> Locacion:
-        return self.destino
+        return self._destino
 
     def fecha_salida(self) -> datetime:
-        return self.fecha_salida
+        return self._fecha_salida
     
     def fecha_llegada(self) -> datetime:
-        return self.fecha_llegada
+        return self._fecha_llegada
 
 @dataclass(frozen=True)
 class Segmento(Ruta):
     legs: list[Leg]
 
     def origen(self) -> Locacion:
-        return self.legs[0].origen
+        return self.legs[0].origen()
 
     def destino(self) -> Locacion:
-        return self.legs[-1].destino
+        return self.legs[-1].destino()
 
     def fecha_salida(self) -> datetime:
-        return self.legs[0].fecha_salida
+        return self.legs[0].fecha_salida()
     
     def fecha_llegada(self) -> datetime:
-        return self.legs[-1].fecha_llegada
+        return self.legs[-1].fecha_llegada()
 
 class TipoVuelo(Enum):
     IDA_Y_VUELTA = "Ida y vuelta"

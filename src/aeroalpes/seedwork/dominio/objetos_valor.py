@@ -34,6 +34,7 @@ class Ruta(ABC, ObjetoValor):
     def fecha_llegada(self) -> datetime:
         ...
 
+
 @dataclass(frozen=True)
 class Pais(ObjetoValor):
     codigo: Codigo
