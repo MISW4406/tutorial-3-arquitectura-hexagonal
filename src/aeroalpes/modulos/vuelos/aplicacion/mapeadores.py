@@ -2,7 +2,7 @@ from aeroalpes.seedwork.aplicacion.dto import Mapeador as AppMap
 from aeroalpes.seedwork.dominio.repositorios import Mapeador as RepMap
 from aeroalpes.modulos.vuelos.dominio.entidades import Reserva, Aeropuerto
 from aeroalpes.modulos.vuelos.dominio.objetos_valor import Itinerario, Odo, Segmento, Leg
-from .dto import ReservaDTO, ItinerarioDTO, OdoDTO, SegmentoDTO, LegDTO
+from .dto import ReservaDTO, ItinerarioDTO, OdoDTO, SegmentoDTO, LegDTO, LocationDTO
 
 from datetime import datetime
 
@@ -15,7 +15,10 @@ class MapeadorReservaDTOJson(AppMap):
             for segmento in odo.get('segmentos', list()):
                 legs_dto: list[LegDTO] = list()
                 for leg in segmento.get('legs', list()):
-                    leg_dto: LegDTO = LegDTO(leg.get('fecha_salida'), leg.get('fecha_llegada'), leg.get('origen'), leg.get('destino')) 
+                    origen_location_dto = LocationDTO(leg.get('origen').get('codigo'), leg.get('origen').get('nombre'))
+                    destino_location_dto = LocationDTO(leg.get('destino').get('codigo'), leg.get('destino').get('nombre'))
+
+                    leg_dto: LegDTO = LegDTO(leg.get('fecha_salida'), leg.get('fecha_llegada'), origen_location_dto, destino_location_dto) 
                     legs_dto.append(leg_dto)  
                 
                 segmentos_dto.append(SegmentoDTO(legs_dto))
@@ -49,8 +52,8 @@ class MapeadorReserva(RepMap):
                 legs = list()
 
                 for leg_dto in seg_dto.legs:
-                    destino = Aeropuerto(codigo=leg_dto.destino.get('codigo'), nombre=leg_dto.destino.get('nombre'))
-                    origen = Aeropuerto(codigo=leg_dto.origen.get('codigo'), nombre=leg_dto.origen.get('nombre'))
+                    destino = Aeropuerto(codigo=leg_dto.destino.codigo, nombre=leg_dto.destino.nombre)
+                    origen = Aeropuerto(codigo=leg_dto.origen.codigo, nombre=leg_dto.origen.nombre)
                     fecha_salida = datetime.strptime(leg_dto.fecha_salida, self._FORMATO_FECHA)
                     fecha_llegada = datetime.strptime(leg_dto.fecha_llegada, self._FORMATO_FECHA)
 
