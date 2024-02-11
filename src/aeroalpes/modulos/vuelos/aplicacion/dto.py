@@ -2,11 +2,16 @@ from dataclasses import dataclass, field
 from aeroalpes.seedwork.aplicacion.dto import DTO
 
 @dataclass(frozen=True)
+class LocationDTO(DTO):
+    codigo: str
+    nombre: str
+
+@dataclass(frozen=True)
 class LegDTO(DTO):
     fecha_salida: str
     fecha_llegada: str
-    origen: dict
-    destino: dict
+    origen: LocationDTO
+    destino: LocationDTO
 
 @dataclass(frozen=True)
 class SegmentoDTO(DTO):
