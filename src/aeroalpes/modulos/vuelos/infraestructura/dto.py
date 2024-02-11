@@ -39,7 +39,9 @@ class Itinerario(db.Model):
     fecha_salida = db.Column(db.DateTime, nullable=False, primary_key=True)
     fecha_llegada = db.Column(db.DateTime, nullable=False, primary_key=True)
     origen_codigo = db.Column(db.String, nullable=False, primary_key=True)
+    origen_nombre = db.Column(db.String, nullable=False, primary_key=False)
     destino_codigo= db.Column(db.String, nullable=False, primary_key=True)
+    destino_nombre= db.Column(db.String, nullable=False, primary_key=False)
 
 
 class Reserva(db.Model):

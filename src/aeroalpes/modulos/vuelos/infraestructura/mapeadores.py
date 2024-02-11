@@ -18,8 +18,8 @@ class MapeadorReserva(Mapeador):
         itin_dict = dict()
         
         for itin in itinerarios_dto:
-            destino = Aeropuerto(codigo=itin.destino_codigo, nombre=None)
-            origen = Aeropuerto(codigo=itin.origen_codigo, nombre=None)
+            destino = Aeropuerto(codigo=itin.destino_codigo, nombre=itin.destino_nombre)
+            origen = Aeropuerto(codigo=itin.origen_codigo, nombre=itin.origen_nombre)
             fecha_salida = itin.fecha_salida
             fecha_llegada = itin.fecha_llegada
 
@@ -45,7 +45,9 @@ class MapeadorReserva(Mapeador):
                 for k, leg in enumerate(seg.legs):
                     itinerario_dto = ItinerarioDTO()
                     itinerario_dto.destino_codigo = leg.destino.codigo
+                    itinerario_dto.destino_nombre = leg.destino.nombre
                     itinerario_dto.origen_codigo = leg.origen.codigo
+                    itinerario_dto.origen_nombre = leg.origen.nombre
                     itinerario_dto.fecha_salida = leg.fecha_salida
                     itinerario_dto.fecha_llegada = leg.fecha_llegada
                     itinerario_dto.leg_orden = k
