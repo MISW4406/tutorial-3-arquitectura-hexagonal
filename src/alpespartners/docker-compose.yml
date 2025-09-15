@@ -1,0 +1,111 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://alpes:alpes@db:5432/alpes
+      - PULSAR_SERVICE_URL=pulsar://pulsar:6650
+      - PULSAR_ADMIN_URL=http://pulsar:8080
+    depends_on:
+      db:
+        condition: service_healthy
+      pulsar:
+        condition: service_healthy
+    volumes:
+      - ./alpespartners:/app/alpespartners
+      - ./migrations:/app/migrations
+      - ./alembic.ini:/app/alembic.ini
+    command: >
+      sh -c "
+        echo 'Esperando servicios...' &&
+        sleep 15 &&
+        alembic upgrade head &&
+        cd /app/alpespartners && 
+        uvicorn main:app --host 0.0.0.0 --port 8000
+      "
+    restart: unless-stopped
+
+  db:
+    image: postgres:15
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=alpes
+      - POSTGRES_PASSWORD=alpes
+      - POSTGRES_DB=alpes
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U alpes"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # Apache Pulsar - Modo standalone
+  pulsar:
+    image: apachepulsar/pulsar:3.1.1
+    command: >
+      sh -c "
+        bin/pulsar standalone --wipe-data
+      "
+    ports:
+      - "6650:6650"   # Pulsar service port
+      - "8080:8080"   # Pulsar admin REST API
+      - "8081:8081"   # Pulsar web console
+    environment:
+      - PULSAR_MEM=-Xms512m -Xmx512m -XX:MaxDirectMemorySize=256m
+    volumes:
+      - pulsar_data:/pulsar/data
+      - pulsar_logs:/pulsar/logs
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/admin/v2/clusters || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    restart: unless-stopped
+
+  # Herramienta para crear topics iniciales
+  pulsar-setup:
+    image: apachepulsar/pulsar:3.1.1
+    depends_on:
+      pulsar:
+        condition: service_healthy
+    command: >
+      sh -c "
+        echo 'Configurando tópicos en Apache Pulsar...'
+        sleep 10
+        
+        echo 'Creando tópicos para Tracking Service...'
+        bin/pulsar-admin topics create persistent://public/default/tracking-clicks
+        bin/pulsar-admin topics create persistent://public/default/tracking-conversiones  
+        bin/pulsar-admin topics create persistent://public/default/tracking-atribuciones
+        
+        echo 'Creando tópicos para Loyalty Service...'
+        bin/pulsar-admin topics create persistent://public/default/loyalty-embajadores-eventos
+        bin/pulsar-admin topics create persistent://public/default/loyalty-referidos-eventos
+        
+        echo 'Creando tópicos para Payment Service...'
+        bin/pulsar-admin topics create persistent://public/default/pagos-eventos
+        bin/pulsar-admin topics create persistent://public/default/pagos-comandos
+        
+        echo 'Creando tópicos para Afiliados Service...'
+        bin/pulsar-admin topics create persistent://public/default/afiliados-eventos
+        bin/pulsar-admin topics create persistent://public/default/afiliados-comandos
+        
+        echo 'Listando tópicos creados:'
+        bin/pulsar-admin topics list public/default
+        
+        echo 'Configuración de Pulsar completada!'
+      "
+    restart: "no"
+
+volumes:
+  postgres_data:
+  pulsar_data:
+  pulsar_logs:
