@@ -1,0 +1,9 @@
+fastapi==0.116.1
+uvicorn==0.35.0
+pydantic==2.11.7
+sqlalchemy==2.0.43
+psycopg2-binary==2.9.10
+alembic==1.16.5
+python-dotenv==1.1.1
+pulsar-client==3.4.0
+requests==2.31.0

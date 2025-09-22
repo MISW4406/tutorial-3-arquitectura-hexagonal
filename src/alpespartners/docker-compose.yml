@@ -1,0 +1,123 @@
+services:
+  app:
+    build:
+      context: .
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://alpes:alpes@db:5432/alpespartners
+      - PULSAR_SERVICE_URL=pulsar://pulsar:6650
+      - PULSAR_ADMIN_URL=http://pulsar:8080
+    depends_on:
+      db:
+        condition: service_healthy
+      pulsar:
+        condition: service_healthy
+    volumes:
+      - ./alpespartners:/app/alpespartners
+      - ./migrations:/app/migrations
+      - ./alembic.ini:/app/alembic.ini
+    command: >
+      sh -c "
+        echo 'Esperando servicios...' &&
+        sleep 15 &&
+        alembic upgrade head &&
+        cd /app/alpespartners && 
+        uvicorn main:app --host 0.0.0.0 --port 8000
+      "
+    restart: unless-stopped
+
+  db:
+    image: postgres:15
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=alpes
+      - POSTGRES_PASSWORD=alpes
+      - POSTGRES_DB=alpespartners
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U alpes"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # Apache Pulsar
+  pulsar:
+    image: apachepulsar/pulsar:3.1.1
+    container_name: pulsar
+    command: >
+      sh -c "
+        bin/pulsar standalone --no-functions-worker --wipe-data
+      "
+    ports:
+      - "6650:6650"
+      - "8080:8080"
+    environment:
+      - PULSAR_MEM=-Xms512m -Xmx1024m -XX:MaxDirectMemorySize=256m
+      - PULSAR_STANDALONE_USE_ZOOKEEPER=0
+    tmpfs:
+      - /pulsar/data
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/metrics/ || exit 1"]
+      interval: 10s
+      timeout: 30s
+      retries: 10
+      start_period: 120s
+    restart: unless-stopped
+
+  bff-partners:
+    build:
+      context: ./bff_partners
+      dockerfile: Dockerfile
+    ports:
+      - "3000:8080"
+    environment:
+      - ALPES_PARTNERS_HOST=app
+      - ALPES_PARTNERS_PORT=8000
+      - PULSAR_SERVICE_URL=pulsar://pulsar:6650
+      - PULSAR_ADMIN_URL=http://pulsar:8080
+    depends_on:
+      app:
+        condition: service_started
+      pulsar:
+        condition: service_healthy
+    command: >
+      sh -c "
+        echo 'Configurando tópicos en Apache Pulsar...'
+        sleep 10
+        
+        echo 'Creando tópicos para Tracking Service...'
+        bin/pulsar-admin topics create persistent://public/default/tracking-clicks
+        bin/pulsar-admin topics create persistent://public/default/tracking-conversiones  
+        bin/pulsar-admin topics create persistent://public/default/tracking-atribuciones
+        
+        echo 'Creando tópicos para Loyalty Service...'
+        bin/pulsar-admin topics create persistent://public/default/loyalty-embajadores-eventos
+        bin/pulsar-admin topics create persistent://public/default/loyalty-referidos-eventos
+        
+        echo 'Creando tópicos para Payment Service...'
+        bin/pulsar-admin topics create persistent://public/default/pagos-eventos
+        bin/pulsar-admin topics create persistent://public/default/pagos-comandos
+        
+        echo 'Creando tópicos para Afiliados Service...'
+        bin/pulsar-admin topics create persistent://public/default/afiliados-eventos
+        bin/pulsar-admin topics create persistent://public/default/afiliados-comandos
+        
+        echo 'Creando tópicos para Saga Service...'
+        bin/pulsar-admin topics create persistent://public/default/saga-eventos
+        bin/pulsar-admin topics create persistent://public/default/saga-comandos
+        bin/pulsar-admin topics create persistent://public/default/saga-log
+        
+        echo 'Listando tópicos creados:'
+        bin/pulsar-admin topics list public/default
+        
+        echo 'Configuración de Pulsar completada!'
+      "
+    restart: "no"
+volumes:
+  postgres_data:
+  pulsar_data:
+  pulsar_logs:

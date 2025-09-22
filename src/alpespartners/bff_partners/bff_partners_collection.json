@@ -1,0 +1,128 @@
+{
+  "info": {
+    "name": "Alpes Partners BFF API",
+    "description": "Collection para probar el Backend for Frontend de Alpes Partners",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "GraphQL - Dashboard Partner",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"query GetDashboard($partnerId: String!) {\\n    dashboardPartner(partnerId: $partnerId) {\\n      partnerID\\n      nombrePartner\\n      totalClicks\\n      totalConversiones\\n      totalComisiones\\n      conversionRate\\n      ultimoPago\\n    }\\n  }\",\n  \"variables\": {\n    \"partnerId\": \"partner123\"\n  }\n}"
+        },
+        "url": {
+          "raw": "{{BFF_URL}}/v1/graphql",
+          "host": ["{{BFF_URL}}"],
+          "path": ["v1", "graphql"]
+        }
+      }
+    },
+    {
+      "name": "GraphQL - Obtener Clicks",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"query GetClicks {\\n    clicks {\\n      id\\n      idPartner\\n      idCampana\\n      urlOrigen\\n      urlDestino\\n      timestamp\\n    }\\n  }\"\n}"
+        },
+        "url": {
+          "raw": "{{BFF_URL}}/v1/graphql",
+          "host": ["{{BFF_URL}}"],
+          "path": ["v1", "graphql"]
+        }
+      }
+    },
+    {
+      "name": "GraphQL - Registrar Click",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"mutation RegistrarClick($idPartner: String!, $idCampana: String!, $urlOrigen: String!, $urlDestino: String!) {\\n    registrarClick(idPartner: $idPartner, idCampana: $idCampana, urlOrigen: $urlOrigen, urlDestino: $urlDestino) {\\n      mensaje\\n      codigo\\n      exito\\n    }\\n  }\",\n  \"variables\": {\n    \"idPartner\": \"partner123\",\n    \"idCampana\": \"campaign456\",\n    \"urlOrigen\": \"https://google.com\",\n    \"urlDestino\": \"https://store.com/product\"\n  }\n}"
+        },
+        "url": {
+          "raw": "{{BFF_URL}}/v1/graphql",
+          "host": ["{{BFF_URL}}"],
+          "path": ["v1", "graphql"]
+        }
+      }
+    },
+    {
+      "name": "GraphQL - Registrar Conversion",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"mutation RegistrarConversion($idPartner: String!, $idCampana: String!, $tipoConversion: String!, $valor: Float!, $moneda: String!) {\\n    registrarConversion(idPartner: $idPartner, idCampana: $idCampana, tipoConversion: $tipoConversion, valor: $valor, moneda: $moneda) {\\n      mensaje\\n      codigo\\n      exito\\n    }\\n  }\",\n  \"variables\": {\n    \"idPartner\": \"partner123\",\n    \"idCampana\": \"campaign456\",\n    \"tipoConversion\": \"VENTA\",\n    \"valor\": 100.50,\n    \"moneda\": \"USD\"\n  }\n}"
+        },
+        "url": {
+          "raw": "{{BFF_URL}}/v1/graphql",
+          "host": ["{{BFF_URL}}"],
+          "path": ["v1", "graphql"]
+        }
+      }
+    },
+    {
+      "name": "Stream Events",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "text/event-stream"
+          }
+        ],
+        "url": {
+          "raw": "{{BFF_URL}}/stream",
+          "host": ["{{BFF_URL}}"],
+          "path": ["stream"]
+        }
+      }
+    },
+    {
+      "name": "Health Check BFF",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{BFF_URL}}/health",
+          "host": ["{{BFF_URL}}"],
+          "path": ["health"]
+        }
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "BFF_URL",
+      "value": "http://localhost:8080",
+      "type": "string"
+    }
+  ]
+}
